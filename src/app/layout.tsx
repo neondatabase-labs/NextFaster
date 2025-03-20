@@ -51,7 +51,7 @@ export default async function RootLayout({
               </div>
               <div className="flex w-full flex-col items-start justify-center sm:w-auto sm:flex-row sm:items-center sm:gap-2">
                 <Link
-                  prefetch={true}
+                  prefetch={false}
                   href="/"
                   className="text-4xl font-bold text-accent1"
                 >
@@ -64,7 +64,7 @@ export default async function RootLayout({
                   <div className="flex flex-row justify-between space-x-4">
                     <div className="relative">
                       <Link
-                        prefetch={true}
+                        prefetch={false}
                         href="/order"
                         className="text-lg text-accent1 hover:underline"
                       >
@@ -75,14 +75,14 @@ export default async function RootLayout({
                       </Suspense>
                     </div>
                     <Link
-                      prefetch={true}
+                      prefetch={false}
                       href="/order-history"
                       className="hidden text-lg text-accent1 hover:underline md:block"
                     >
                       ORDER HISTORY
                     </Link>
                     <Link
-                      prefetch={true}
+                      prefetch={false}
                       href="/order-history"
                       aria-label="Order History"
                       className="block text-lg text-accent1 hover:underline md:hidden"
@@ -111,6 +111,7 @@ export default async function RootLayout({
           <div className="text-center sm:text-right">
             By using this website, you agree to check out the{" "}
             <Link
+              prefetch={false}
               href="https://github.com/ethanniser/NextFaster"
               className="font-bold text-accent1 hover:underline"
               target="_blank"
