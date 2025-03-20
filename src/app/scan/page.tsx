@@ -16,7 +16,11 @@ export default function ScanPage() {
       <p className="mb-4 text-lg">
         React Scan has loaded, you can now start exploring the site
       </p>
-      <Link href="/" className="text-blue-500 underline hover:text-blue-700">
+      <Link
+        prefetch={false}
+        href="/"
+        className="text-blue-500 underline hover:text-blue-700"
+      >
         Back to home
       </Link>
     </div>
