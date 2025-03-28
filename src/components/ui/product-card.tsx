@@ -1,21 +1,19 @@
 "use client";
-import Link from "next/link";
-import NextImage from "next/image";
-import { getImageProps } from "next/image";
+
 import { Product } from "@/db/schema";
-import { useEffect } from "react";
+import Link from "next/link";
 
 export function getProductLinkImageProps(
   imageUrl: string,
   productName: string,
 ) {
-  return getImageProps({
+  return {
     width: 48,
     height: 48,
     quality: 65,
     src: imageUrl,
     alt: `A small picture of ${productName}`,
-  });
+  };
 }
 
 export function ProductLink(props: {
@@ -26,32 +24,6 @@ export function ProductLink(props: {
   product: Product;
 }) {
   const { category_slug, subcategory_slug, product, imageUrl } = props;
-
-  // prefetch the main image for the product page, if this is too heavy
-  // we could only prefetch the first few cards, then prefetch on hover
-  const prefetchProps = getImageProps({
-    height: 256,
-    quality: 80,
-    width: 256,
-    src: imageUrl ?? "/placeholder.svg?height=64&width=64",
-    alt: `A small picture of ${product.name}`,
-  });
-  useEffect(() => {
-    try {
-      const iprops = prefetchProps.props;
-      const img = new Image();
-      // Don't interfer with important requests
-      img.fetchPriority = "low";
-      // Don't block the main thread with prefetch images
-      img.decoding = "async";
-      // Order is important here, sizes must be set before srcset, srcset must be set before src
-      if (iprops.sizes) img.sizes = iprops.sizes;
-      if (iprops.srcSet) img.srcset = iprops.srcSet;
-      if (iprops.src) img.src = iprops.src;
-    } catch (e) {
-      console.error("failed to preload", prefetchProps.props.src, e);
-    }
-  }, [prefetchProps]);
   return (
     <Link
       prefetch={false}
@@ -59,14 +31,13 @@ export function ProductLink(props: {
       href={`/products/${category_slug}/${subcategory_slug}/${product.slug}`}
     >
       <div className="py-2">
-        <NextImage
-          loading={props.loading}
-          decoding="sync"
-          src={imageUrl ?? "/placeholder.svg?height=48&width=48"}
-          alt={`A small picture of ${product.name}`}
+        <img
           width={48}
           height={48}
-          quality={65}
+          decoding="async"
+          loading={props.loading}
+          alt={`A small picture of ${product.name}`}
+          src={imageUrl ?? "/placeholder.svg?height=48&width=48"}
           className="h-auto w-12 flex-shrink-0 object-cover"
         />
       </div>

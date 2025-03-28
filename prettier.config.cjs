@@ -2,13 +2,13 @@
 
 /** @type { PrettierConfig | SortImportsConfig } */
 const config = {
-  arrowParens: "always",
+  semi: true,
+  tabWidth: 2,
   printWidth: 80,
   singleQuote: false,
-  semi: true,
   trailingComma: "all",
-  tabWidth: 2,
-  plugins: ["prettier-plugin-tailwindcss"],
+  arrowParens: "always",
+  plugins: ["prettier-plugin-tailwindcss", "prettier-plugin-organize-imports"],
 };
 
 module.exports = config;

@@ -1,6 +1,6 @@
 "use client";
-import { useActionState } from "react";
 import { addToCart } from "@/lib/actions";
+import { useActionState } from "react";
 
 export function AddToCartForm({ productSlug }: { productSlug: string }) {
   const [message, formAction, isPending] = useActionState(addToCart, null);

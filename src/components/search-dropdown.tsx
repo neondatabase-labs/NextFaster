@@ -1,15 +1,14 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { ProductSearchResult } from "@/app/api/search/route";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { X } from "lucide-react";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { Product } from "../db/schema";
+import { X } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { ProductSearchResult } from "@/app/api/search/route";
+import { useEffect, useRef, useState } from "react";
+import { Product } from "../db/schema";
 
 type SearchResult = Product & { href: string };
 
@@ -139,15 +138,13 @@ export function SearchDropdownComponent() {
                         inputRef.current?.blur();
                       }}
                     >
-                      <Image
-                        loading="eager"
-                        decoding="sync"
-                        src={item.image_url ?? "/placeholder.svg"}
-                        alt=""
-                        className="h-10 w-10 pr-2"
-                        height={40}
+                      <img
                         width={40}
-                        quality={65}
+                        height={40}
+                        loading="eager"
+                        decoding="async"
+                        className="h-10 w-10 pr-2"
+                        src={item.image_url ?? "/placeholder.svg"}
                       />
                       <span className="text-sm">{item.name}</span>
                     </div>

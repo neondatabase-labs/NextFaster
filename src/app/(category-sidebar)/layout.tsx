@@ -1,12 +1,12 @@
+import { getCollectionsWithoutCategories } from "@/lib/queries";
 import Link from "next/link";
-import { getCollections } from "@/lib/queries";
 
 export default async function Layout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const allCollections = await getCollections();
+  const allCollections = await getCollectionsWithoutCategories();
   return (
     <div className="flex flex-grow font-mono">
       <aside className="fixed left-0 hidden w-64 min-w-64 max-w-64 overflow-y-auto border-r p-4 md:block">
@@ -15,15 +15,14 @@ export default async function Layout({
         </h2>
         <ul className="flex flex-col items-start justify-center">
           {allCollections.map((collection) => (
-            <li key={collection.slug} className="w-full">
-              <Link
-                prefetch={false}
-                href={`/${collection.slug}`}
-                className="block w-full py-1 text-xs text-gray-800 hover:bg-accent2 hover:underline"
-              >
-                {collection.name}
-              </Link>
-            </li>
+            <Link
+              prefetch={false}
+              key={collection.slug}
+              href={`/${collection.slug}`}
+              className="block w-full py-1 text-xs text-gray-800 hover:bg-accent2 hover:underline"
+            >
+              {collection.name}
+            </Link>
           ))}
         </ul>
       </aside>

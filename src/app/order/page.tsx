@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { Suspense } from "react";
-import { CartItems, TotalCost } from "./dynamic";
 import { PlaceOrderAuth } from "../auth.server";
+import { CartItems, TotalCost } from "./dynamic";
 
 export const metadata: Metadata = {
   title: "Order",

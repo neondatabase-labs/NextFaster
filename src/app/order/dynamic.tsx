@@ -1,9 +1,8 @@
-import { cache } from "react";
-import { detailedCart } from "@/lib/cart";
-import Link from "next/link";
-import Image from "next/image";
 import { removeFromCart } from "@/lib/actions";
+import { detailedCart } from "@/lib/cart";
 import { X } from "lucide-react";
+import Link from "next/link";
+import { cache } from "react";
 
 const getCartItems = cache(() => detailedCart());
 type CartItem = Awaited<ReturnType<typeof getCartItems>>[number];
@@ -44,14 +43,13 @@ function CartItem({ product }: { product: CartItem }) {
       >
         <div className="flex flex-row space-x-2">
           <div className="flex h-24 w-24 items-center justify-center bg-gray-100">
-            <Image
-              loading="eager"
-              decoding="sync"
-              src={product.image_url ?? "/placeholder.svg"}
-              alt="Product"
+            <img
               width={256}
               height={256}
-              quality={80}
+              alt="Product"
+              loading="eager"
+              decoding="async"
+              src={product.image_url ?? "/placeholder.svg"}
             />
           </div>
           <div className="max-w-[100px] flex-grow sm:max-w-full">
@@ -85,11 +83,9 @@ function CartItem({ product }: { product: CartItem }) {
 
 export async function TotalCost() {
   const cart = await getCartItems();
-
   const totalCost = cart.reduce(
     (acc, item) => acc + item.quantity * Number(item.price),
     0,
   );
-
   return <span> ${totalCost.toFixed(2)}</span>;
 }

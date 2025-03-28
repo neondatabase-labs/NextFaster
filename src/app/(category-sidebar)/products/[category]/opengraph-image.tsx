@@ -1,6 +1,6 @@
-import { ImageResponse } from "next/og";
-import { notFound } from "next/navigation";
 import { getCategory } from "@/lib/queries";
+import { notFound } from "next/navigation";
+import { ImageResponse } from "next/og";
 
 // Route segment config
 export const runtime = "edge";

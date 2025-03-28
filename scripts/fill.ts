@@ -1,7 +1,7 @@
-import slugify from "slugify";
-import { products, subcategories } from "../src/db/schema";
-import { db } from "../src/db";
 import { eq, isNull } from "drizzle-orm";
+import slugify from "slugify";
+import { db } from "../src/db";
+import { products, subcategories } from "../src/db/schema";
 
 const readline = require("readline");
 const fs = require("fs");

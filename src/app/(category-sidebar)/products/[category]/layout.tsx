@@ -1,6 +1,6 @@
+import { getCategory } from "@/lib/queries";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getCategory } from "@/lib/queries";
 
 export async function generateMetadata({
   params,

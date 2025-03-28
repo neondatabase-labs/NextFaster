@@ -1,13 +1,6 @@
-import Image from "next/image";
+import { getCategory, getCategoryProductCount } from "@/lib/queries";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getCategory, getCategoryProductCount } from "@/lib/queries";
-import { db } from "@/db";
-import { categories } from "@/db/schema";
-
-export async function generateStaticParams() {
-  return await db.select({ category: categories.slug }).from(categories);
-}
 
 export default async function Page(props: {
   params: Promise<{
@@ -48,15 +41,14 @@ export default async function Page(props: {
                     href={`/products/${category}/${subcategory.slug}`}
                   >
                     <div className="py-2">
-                      <Image
-                        loading="eager"
-                        decoding="sync"
-                        src={subcategory.image_url ?? "/placeholder.svg"}
-                        alt={`A small picture of ${subcategory.name}`}
+                      <img
                         width={48}
                         height={48}
-                        quality={65}
+                        loading="eager"
+                        decoding="async"
+                        alt={`A small picture of ${subcategory.name}`}
                         className="h-12 w-12 flex-shrink-0 object-cover"
+                        src={subcategory.image_url ?? "/placeholder.svg"}
                       />
                     </div>
                     <div className="flex h-16 flex-grow flex-col items-start py-2">

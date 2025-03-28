@@ -1,13 +1,5 @@
-import Link from "next/link";
-import { db } from "@/db";
-import { collections } from "@/db/schema";
 import { getCollectionDetails } from "@/lib/queries";
-
-import Image from "next/image";
-
-export async function generateStaticParams() {
-  return await db.select({ collection: collections.slug }).from(collections);
-}
+import Link from "next/link";
 
 export default async function Home(props: {
   params: Promise<{
@@ -32,15 +24,14 @@ export default async function Home(props: {
                 className="flex w-[125px] flex-col items-center text-center"
                 href={`/products/${category.slug}`}
               >
-                <Image
-                  loading={imageCount++ < 15 ? "eager" : "lazy"}
-                  decoding="sync"
-                  src={category.image_url ?? "/placeholder.svg"}
-                  alt={`A small picture of ${category.name}`}
-                  className="mb-2 h-14 w-14 border hover:bg-accent2"
+                <img
                   width={48}
                   height={48}
-                  quality={65}
+                  decoding="async"
+                  alt={`A small picture of ${category.name}`}
+                  loading={imageCount++ < 15 ? "eager" : "lazy"}
+                  src={category.image_url ?? "/placeholder.svg"}
+                  className="mb-2 h-14 w-14 border hover:bg-accent2"
                 />
                 <span className="text-xs">{category.name}</span>
               </Link>

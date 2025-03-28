@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Popover,
@@ -6,9 +7,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ActionState } from "@/lib/middleware";
-import { signIn, signUp } from "./(login)/actions";
 import { useActionState } from "react";
-import { Button } from "@/components/ui/button";
+import { signIn, signUp } from "./(login)/actions";
 
 export function LoginForm() {
   const [signInState, signInFormAction, signInPending] = useActionState<

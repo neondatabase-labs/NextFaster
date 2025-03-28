@@ -1,11 +1,11 @@
-import { notFound } from "next/navigation";
 import { ProductLink } from "@/components/ui/product-card";
-import type { Metadata } from "next";
 import {
   getProductsForSubcategory,
   getSubcategory,
   getSubcategoryProductCount,
 } from "@/lib/queries";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 // import { db } from "@/db";
 
 // export async function generateStaticParams() {

@@ -1,16 +1,16 @@
-import { cookies } from "next/headers";
-import { verifyToken } from "./session";
+import { db, sql as sqlNeon } from "@/db";
 import {
   categories,
+  collections,
   products,
   subcategories,
   subcollections,
   users,
 } from "@/db/schema";
-import { db } from "@/db";
-import { eq, and, count } from "drizzle-orm";
+import { and, count, eq, sql } from "drizzle-orm";
+import { cookies } from "next/headers";
+import { verifyToken } from "./session";
 import { unstable_cache } from "./unstable-cache";
-import { sql } from "drizzle-orm";
 
 export async function getUser() {
   const sessionCookie = (await cookies()).get("session");
@@ -49,7 +49,7 @@ export const getProductsForSubcategory = unstable_cache(
     db.query.products.findMany({
       where: (products, { eq, and }) =>
         and(eq(products.subcategory_slug, subcategorySlug)),
-      orderBy: (products, { asc }) => asc(products.slug),
+      // orderBy: (products, { asc }) => asc(products.slug),
     }),
   ["subcategory-products"],
   {
@@ -59,13 +59,66 @@ export const getProductsForSubcategory = unstable_cache(
 
 export const getCollections = unstable_cache(
   () =>
-    db.query.collections.findMany({
-      with: {
-        categories: true,
+    sqlNeon`SELECT 
+    c.id AS collection_id, 
+    c.name AS collection_name, 
+    c.slug AS collection_slug, 
+    cat.slug AS category_slug, 
+    cat.name AS category_name, 
+    cat.image_url AS category_image_url
+    FROM collections c LEFT JOIN categories cat ON cat.collection_id = c.id;`.then(
+      (res) => {
+        const collections = res.reduce((acc, row) => {
+          const {
+            collection_id,
+            collection_name,
+            collection_slug,
+            category_slug,
+            category_name,
+            category_image_url,
+          } = row;
+          const collection = acc.find(
+            (item: { id: number }) => item.id === collection_id,
+          );
+          if (collection) {
+            collection.categories.push({
+              slug: category_slug,
+              name: category_name,
+              image_url: category_image_url,
+            });
+          } else {
+            acc.push({
+              id: collection_id,
+              name: collection_name,
+              slug: collection_slug,
+              categories: category_slug
+                ? [
+                    {
+                      slug: category_slug,
+                      name: category_name,
+                      image_url: category_image_url,
+                    },
+                  ]
+                : [],
+            });
+          }
+          return acc;
+        }, []);
+        return collections;
       },
-      orderBy: (collections, { asc }) => asc(collections.name),
-    }),
+    ),
   ["collections"],
+  {
+    revalidate: 60 * 60 * 2, // two hours,
+  },
+);
+
+export const getCollectionsWithoutCategories = unstable_cache(
+  () =>
+    db
+      .select({ name: collections.name, slug: collections.slug })
+      .from(collections),
+  ["collectionsWithoutCategory"],
   {
     revalidate: 60 * 60 * 2, // two hours,
   },
@@ -118,7 +171,7 @@ export const getCollectionDetails = unstable_cache(
         categories: true,
       },
       where: (collections, { eq }) => eq(collections.slug, collectionSlug),
-      orderBy: (collections, { asc }) => asc(collections.slug),
+      // orderBy: (collections, { asc }) => asc(collections.slug),
     }),
   ["collection"],
   {
@@ -127,7 +180,10 @@ export const getCollectionDetails = unstable_cache(
 );
 
 export const getProductCount = unstable_cache(
-  () => db.select({ count: count() }).from(products),
+  () =>
+    sqlNeon`EXPLAIN (FORMAT JSON) select price from "products";`.then((res) => [
+      { count: res[0]["QUERY PLAN"][0]["Plan"]["Plan Rows"] },
+    ]),
   ["total-product-count"],
   {
     revalidate: 60 * 60 * 2, // two hours,
@@ -138,7 +194,7 @@ export const getProductCount = unstable_cache(
 export const getCategoryProductCount = unstable_cache(
   (categorySlug: string) =>
     db
-      .select({ count: count() })
+      .select({ count: count(categories.slug) })
       .from(categories)
       .leftJoin(
         subcollections,
@@ -159,7 +215,7 @@ export const getCategoryProductCount = unstable_cache(
 export const getSubcategoryProductCount = unstable_cache(
   (subcategorySlug: string) =>
     db
-      .select({ count: count() })
+      .select({ count: count(products.slug) })
       .from(products)
       .where(eq(products.subcategory_slug, subcategorySlug)),
   ["subcategory-product-count"],

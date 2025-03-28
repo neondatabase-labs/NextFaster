@@ -1,17 +1,10 @@
-import { db } from "../src/db";
-import { Effect, Schedule, Console, Cause } from "effect";
-import {
-  products as products_table,
-  categories,
-  subcategories as subcategories_table,
-  subcategories,
-  products,
-  subcollections,
-} from "../src/db/schema";
-import { eq, sql, lt } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
+import { Effect, Schedule } from "effect";
 import OpenAI from "openai";
-import { z } from "zod";
 import slugify from "slugify";
+import { z } from "zod";
+import { db } from "../src/db";
+import { products, subcategories } from "../src/db/schema";
 
 const productValidator = z.object({
   products: z.array(

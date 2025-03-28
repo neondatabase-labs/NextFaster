@@ -1,5 +1,9 @@
+import { createOpenAI } from "@ai-sdk/openai";
+import { generateObject } from "ai";
+import { eq, isNull } from "drizzle-orm";
 import OpenAI from "openai";
 import slugify from "slugify";
+import { z } from "zod";
 import { db } from "../src/db";
 import {
   categories,
@@ -7,10 +11,6 @@ import {
   subcategories,
   subcollections,
 } from "../src/db/schema";
-import { eq, isNull } from "drizzle-orm";
-import { generateObject } from "ai";
-import { createOpenAI } from "@ai-sdk/openai";
-import { z } from "zod";
 const fs = require("fs");
 
 const openai = new OpenAI();

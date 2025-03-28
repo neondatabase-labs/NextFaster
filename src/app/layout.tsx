@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import { SearchDropdownComponent } from "@/components/search-dropdown";
-import { MenuIcon } from "lucide-react";
-import { Suspense } from "react";
 import { Cart } from "@/components/cart";
-import { AuthServer } from "./auth.server";
-import Link from "next/link";
-import { Toaster } from "sonner";
-import { WelcomeToast } from "./welcome-toast";
-import { GeistSans } from "geist/font/sans";
+import { SearchDropdownComponent } from "@/components/search-dropdown";
 import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
+import { MenuIcon } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { Suspense } from "react";
+import { Toaster } from "sonner";
+import { AuthServer } from "./auth.server";
+import "./globals.css";
+import { WelcomeToast } from "./welcome-toast";
 
 export const metadata: Metadata = {
   title: {
