@@ -9,15 +9,12 @@ export default async function Page(props: {
 }) {
   const { category } = await props.params;
   const urlDecoded = decodeURIComponent(category);
-  const cat = await getCategory(urlDecoded);
-  if (!cat) {
-    return notFound();
-  }
-
-  const countRes = await getCategoryProductCount(urlDecoded);
-
+  const [cat, countRes] = await Promise.all([
+    getCategory(urlDecoded),
+    getCategoryProductCount(urlDecoded),
+  ]);
+  if (!cat) return notFound();
   const finalCount = countRes[0]?.count;
-
   return (
     <div className="container p-4">
       {finalCount && (

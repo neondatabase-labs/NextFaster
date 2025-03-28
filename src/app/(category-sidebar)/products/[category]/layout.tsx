@@ -10,17 +10,12 @@ export async function generateMetadata({
   const { category: categoryParam } = await params;
   const urlDecoded = decodeURIComponent(categoryParam);
   const category = await getCategory(urlDecoded);
-
-  if (!category) {
-    return notFound();
-  }
-
+  if (!category) return notFound();
   const examples = category.subcollections
     .slice(0, 2)
     .map((s) => s.name)
     .join(", ")
     .toLowerCase();
-
   return {
     title: `${category.name}`,
     openGraph: {

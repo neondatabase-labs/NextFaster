@@ -6,4 +6,7 @@ export const unstable_cache = <Inputs extends unknown[], Output>(
   callback: (...args: Inputs) => Promise<Output>,
   key: string[],
   options: { revalidate: number },
-) => process.env.NODE_ENV === 'production' ? cache(next_unstable_cache(callback, key, options)) : callback;
+) =>
+  process.env.NODE_ENV === "production"
+    ? cache(next_unstable_cache(callback, key, options))
+    : callback;

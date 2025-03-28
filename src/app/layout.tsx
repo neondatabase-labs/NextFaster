@@ -19,8 +19,6 @@ export const metadata: Metadata = {
   description: "A performant site built with Next.js",
 };
 
-export const revalidate = 86400; // One day
-
 export default async function RootLayout({
   children,
 }: Readonly<{

@@ -1,18 +1,35 @@
 import { getCollections, getProductCount } from "@/lib/queries";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export default async function Home() {
-  const [collections, productCount] = await Promise.all([
-    getCollections(),
-    getProductCount(),
-  ]);
+  return (
+    <div className="w-full p-4">
+      <Suspense fallback={<div>Loading...</div>}>
+        {/* Await productCount inside Suspense */}
+        <ProductCount />
+        {/* Await collections inside Suspense */}
+        <Collections />
+      </Suspense>
+    </div>
+  );
+}
+
+async function ProductCount() {
+  const productCount = await getProductCount();
+  return (
+    <div className="mb-2 w-full flex-grow border-b-[1px] border-accent1 text-sm font-semibold text-black">
+      Explore {productCount.at(0)?.count.toLocaleString()} products
+    </div>
+  );
+}
+
+async function Collections() {
+  const collections = await getCollections();
   let imageCount = 0;
 
   return (
-    <div className="w-full p-4">
-      <div className="mb-2 w-full flex-grow border-b-[1px] border-accent1 text-sm font-semibold text-black">
-        Explore {productCount.at(0)?.count.toLocaleString()} products
-      </div>
+    <>
       {collections.map(
         (collection: {
           name: string;
@@ -51,6 +68,6 @@ export default async function Home() {
           </div>
         ),
       )}
-    </div>
+    </>
   );
 }
