@@ -6,7 +6,6 @@ import { Suspense } from "react";
 import { Cart } from "@/components/cart";
 import { AuthServer } from "./auth.server";
 import { Link } from "@/components/ui/link";
-import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "sonner";
 import { WelcomeToast } from "./welcome-toast";
 import { GeistSans } from "geist/font/sans";
@@ -125,7 +124,6 @@ export default async function RootLayout({
           <Toaster closeButton />
           <WelcomeToast />
         </Suspense>
-        <Analytics scriptSrc="/insights/events.js" endpoint="/hfi/events" />
       </body>
     </html>
   );

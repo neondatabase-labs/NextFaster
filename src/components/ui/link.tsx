@@ -12,10 +12,6 @@ type PrefetchImage = {
   loading: string;
 };
 
-function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 async function prefetchImages(href: string) {
   if (!href.startsWith("/") || href.startsWith("/order") || href === "/") {
     return [];
@@ -50,16 +46,13 @@ export const Link: typeof NextLink = (({ children, ...props }) => {
       (entries) => {
         const entry = entries[0];
         if (entry.isIntersecting) {
+          // eslint-disable-next-line react-hooks/exhaustive-deps
           prefetchTimeout = setTimeout(async () => {
-            router.prefetch(String(props.href));
-            await sleep(0);
-
             if (!imageCache.has(String(props.href))) {
               void prefetchImages(String(props.href)).then((images) => {
                 imageCache.set(String(props.href), images);
               }, console.error);
             }
-
             observer.unobserve(entry.target);
           }, 300);
         } else if (prefetchTimeout) {
@@ -85,7 +78,6 @@ export const Link: typeof NextLink = (({ children, ...props }) => {
       ref={linkRef}
       prefetch={false}
       onMouseEnter={() => {
-        router.prefetch(String(props.href));
         const images = imageCache.get(String(props.href)) || [];
         for (const image of images) {
           prefetchImage(image);
