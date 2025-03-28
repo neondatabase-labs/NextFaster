@@ -1,4 +1,4 @@
-import { Link } from "@/components/ui/link";
+import Link from "next/link";
 import { db } from "@/db";
 import { collections } from "@/db/schema";
 import { getCollectionDetails } from "@/lib/queries";

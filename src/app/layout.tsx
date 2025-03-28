@@ -5,7 +5,7 @@ import { MenuIcon } from "lucide-react";
 import { Suspense } from "react";
 import { Cart } from "@/components/cart";
 import { AuthServer } from "./auth.server";
-import { Link } from "@/components/ui/link";
+import Link from "next/link";
 import { Toaster } from "sonner";
 import { WelcomeToast } from "./welcome-toast";
 import { GeistSans } from "geist/font/sans";

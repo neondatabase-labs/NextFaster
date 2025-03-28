@@ -7,7 +7,7 @@ import { X } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Product } from "../db/schema";
-import { Link } from "@/components/ui/link";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { ProductSearchResult } from "@/app/api/search/route";
 

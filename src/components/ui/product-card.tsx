@@ -1,5 +1,5 @@
 "use client";
-import { Link } from "@/components/ui/link";
+import Link from "next/link";
 import NextImage from "next/image";
 import { getImageProps } from "next/image";
 import { Product } from "@/db/schema";

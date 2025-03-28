@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Link } from "@/components/ui/link";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCategory, getCategoryProductCount } from "@/lib/queries";
 import { db } from "@/db";
