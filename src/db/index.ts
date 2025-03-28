@@ -14,6 +14,6 @@ export const db = drizzle(
   new Pool({ connectionString: process.env.POSTGRES_URL }),
   {
     schema,
-    logger: process.env.NODE_ENV !== 'production',
+    logger: process.env.NODE_ENV !== "production",
   },
 );
