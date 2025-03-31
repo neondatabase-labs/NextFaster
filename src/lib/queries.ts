@@ -12,6 +12,9 @@ import { cookies } from "next/headers";
 import { verifyToken } from "./session";
 import { unstable_cache } from "./unstable-cache";
 
+// const revalidate = 60 * 60 * 2;
+const revalidate = 60 * 60 * 24 * 365;
+
 export async function getUser() {
   const sessionCookie = (await cookies()).get("session");
   if (!sessionCookie || !sessionCookie.value) {
@@ -53,7 +56,7 @@ export const getProductsForSubcategory = unstable_cache(
     }),
   ["subcategory-products"],
   {
-    revalidate: 60 * 60 * 2, // two hours,
+    revalidate, // two hours,
   },
 );
 
@@ -109,7 +112,7 @@ export const getCollections = unstable_cache(
     ),
   ["collections"],
   {
-    revalidate: 60 * 60 * 2, // two hours,
+    revalidate, // two hours,
   },
 );
 
@@ -120,7 +123,7 @@ export const getCollectionsWithoutCategories = unstable_cache(
       .from(collections),
   ["collectionsWithoutCategory"],
   {
-    revalidate: 60 * 60 * 2, // two hours,
+    revalidate, // two hours,
   },
 );
 
@@ -131,7 +134,7 @@ export const getProductDetails = unstable_cache(
     }),
   ["product"],
   {
-    revalidate: 60 * 60 * 2, // two hours,
+    revalidate, // two hours,
   },
 );
 
@@ -142,7 +145,7 @@ export const getSubcategory = unstable_cache(
     }),
   ["subcategory"],
   {
-    revalidate: 60 * 60 * 2, // two hours,
+    revalidate, // two hours,
   },
 );
 
@@ -160,7 +163,7 @@ export const getCategory = unstable_cache(
     }),
   ["category"],
   {
-    revalidate: 60 * 60 * 2, // two hours,
+    revalidate, // two hours,
   },
 );
 
@@ -175,7 +178,7 @@ export const getCollectionDetails = unstable_cache(
     }),
   ["collection"],
   {
-    revalidate: 60 * 60 * 2, // two hours,
+    revalidate, // two hours,
   },
 );
 
@@ -186,7 +189,7 @@ export const getProductCount = unstable_cache(
     ]),
   ["total-product-count"],
   {
-    revalidate: 60 * 60 * 2, // two hours,
+    revalidate, // two hours,
   },
 );
 
@@ -208,7 +211,7 @@ export const getCategoryProductCount = unstable_cache(
       .where(eq(categories.slug, categorySlug)),
   ["category-product-count"],
   {
-    revalidate: 60 * 60 * 2, // two hours,
+    revalidate, // two hours,
   },
 );
 
@@ -220,7 +223,7 @@ export const getSubcategoryProductCount = unstable_cache(
       .where(eq(products.subcategory_slug, subcategorySlug)),
   ["subcategory-product-count"],
   {
-    revalidate: 60 * 60 * 2, // two hours,
+    revalidate, // two hours,
   },
 );
 
@@ -281,5 +284,5 @@ export const getSearchResults = unstable_cache(
     return results;
   },
   ["search-results"],
-  { revalidate: 60 * 60 * 2 }, // two hours
+  { revalidate }, // two hours
 );

@@ -1,12 +1,26 @@
-import { unstable_cache as next_unstable_cache } from "next/cache";
-import { cache } from "react";
+import { Redis } from "@upstash/redis";
 
-// next_unstable_cache doesn't handle deduplication, so we wrap it in React's cache
+const redis = new Redis({
+  url: process.env.REDIS_URL,
+  token: process.env.REDIS_TOKEN,
+});
+
+// Custom unstable_cache implementation using Upstash Redis
 export const unstable_cache = <Inputs extends unknown[], Output>(
   callback: (...args: Inputs) => Promise<Output>,
   key: string[],
   options: { revalidate: number },
-) =>
-  process.env.NODE_ENV === "production"
-    ? cache(next_unstable_cache(callback, key, options))
-    : callback;
+) => {
+  return async (...args: Inputs) => {
+    const cacheKey = JSON.stringify([...key, ...args]);
+    // Try to get the cached value from Redis
+    const cachedValue = await redis.get<Output>(cacheKey);
+    if (cachedValue) return cachedValue;
+    // If not found in cache, call the callback
+    const result = await callback(...args);
+    // Set the value in Redis with an expiration time
+    await redis.set(cacheKey, result);
+    await redis.expire(cacheKey, options.revalidate);
+    return result;
+  };
+};

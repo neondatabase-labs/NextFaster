@@ -1,35 +1,19 @@
 import { getCollections, getProductCount } from "@/lib/queries";
 import Link from "next/link";
-import { Suspense } from "react";
+
+export const runtime = "edge";
 
 export default async function Home() {
+  const [productCount, collections] = await Promise.all([
+    getProductCount(),
+    getCollections(),
+  ]);
+
   return (
     <div className="w-full p-4">
-      <Suspense fallback={<div>Loading...</div>}>
-        {/* Await productCount inside Suspense */}
-        <ProductCount />
-        {/* Await collections inside Suspense */}
-        <Collections />
-      </Suspense>
-    </div>
-  );
-}
-
-async function ProductCount() {
-  const productCount = await getProductCount();
-  return (
-    <div className="mb-2 w-full flex-grow border-b-[1px] border-accent1 text-sm font-semibold text-black">
-      Explore {productCount.at(0)?.count.toLocaleString()} products
-    </div>
-  );
-}
-
-async function Collections() {
-  const collections = await getCollections();
-  let imageCount = 0;
-
-  return (
-    <>
+      <div className="mb-2 w-full flex-grow border-b-[1px] border-accent1 text-sm font-semibold text-black">
+        Explore {productCount.at(0)?.count.toLocaleString()} products
+      </div>
       {collections.map(
         (collection: {
           name: string;
@@ -56,7 +40,7 @@ async function Collections() {
                       height={48}
                       decoding="async"
                       alt={`A small picture of ${category.name}`}
-                      loading={imageCount++ < 15 ? "eager" : "lazy"}
+                      loading="lazy"
                       src={category.image_url ?? "/placeholder.svg"}
                       className="mb-2 h-14 w-14 border hover:bg-accent2"
                     />
@@ -68,6 +52,6 @@ async function Collections() {
           </div>
         ),
       )}
-    </>
+    </div>
   );
 }

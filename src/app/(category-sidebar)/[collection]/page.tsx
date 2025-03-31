@@ -1,6 +1,8 @@
 import { getCollectionDetails } from "@/lib/queries";
 import Link from "next/link";
 
+export const runtime = "edge";
+
 export default async function Home(props: {
   params: Promise<{
     collection: string;

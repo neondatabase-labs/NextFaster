@@ -7,6 +7,8 @@ import {
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+export const runtime = "edge";
+
 export async function generateMetadata(props: {
   params: Promise<{ category: string; subcategory: string }>;
 }): Promise<Metadata> {

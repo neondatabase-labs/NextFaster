@@ -4,6 +4,8 @@ import { getProductDetails, getProductsForSubcategory } from "@/lib/queries";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+export const runtime = "edge";
+
 export async function generateMetadata(props: {
   params: Promise<{ product: string; category: string; subcategory: string }>;
 }): Promise<Metadata> {

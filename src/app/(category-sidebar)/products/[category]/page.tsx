@@ -2,6 +2,8 @@ import { getCategory, getCategoryProductCount } from "@/lib/queries";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+export const runtime = "edge";
+
 export default async function Page(props: {
   params: Promise<{
     category: string;
